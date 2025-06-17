@@ -1,1 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milano Cafe - Premium Dining Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .food-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .notification {
+            animation: slideIn 0.5s forwards, fadeOut 0.5s 4.5s forwards;
+        }
+        
+        @keyframes slideIn {
+            from { right: -100%; }
+            to { right: 20px; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .menu-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-black text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl font-bold text-yellow-400">MILANO</span>
+                <span class="text-lg">CAFE</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="nav-link active">BOSH SAHIFA</a>
+                <a href="#menu" class="nav-link">MENYU</a>
+                <a href="#cart" class="nav-link relative">
+                    SAVAT
+                    <span id="cart-count" class="absolute -top-2 -right-4 bg-yellow-400 text-black rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">0</span>
+                </a>
+                <a href="#contact" class="nav-link">ALOQA</a>
+                <a href="#about" class="nav-link">BIZ HAQIMIZDA</a>
+                <a href="#admin" class="nav-link">ADMIN</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden bg-black pb-4 px-4 md:hidden">
+            <a href="#home" class="block py-2 border-b border-gray-700 nav-link-mobile active">BOSH SAHIFA</a>
+            <a href="#menu" class="block py-2 border-b border-gray-700 nav-link-mobile">MENYU</a>
+            <a href="#cart" class="block py-2 border-b border-gray-700 nav-link-mobile relative">
+                SAVAT
+                <span id="mobile-cart-count" class="ml-2 bg-yellow-400 text-black rounded-full w-5 h-5 inline-flex items-center justify-center text-xs font-bold">0</span>
+            </a>
+            <a href="#contact" class="block py-2 border-b border-gray-700 nav-link-mobile">ALOQA</a>
+            <a href="#about" class="block py-2 border-b border-gray-700 nav-link-mobile">BIZ HAQIMIZDA</a>
+            <a href="#admin" class="block py-2 nav-link-mobile">ADMIN</a>
+        </div>
+    </nav>
 
+    <!-- Notification -->
+    <div id="notification" class="hidden fixed top-20 right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+        Mahsulot savatga qo'shildi!
+    </div>
+
+    <!-- Home Section -->
+    <section id="home" class="relative overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="container mx-auto px-4 py-32 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold text-yellow-400 mb-4">MILANO</h1>
+            <h2 class="text-3xl md:text-5xl font-semibold text-white mb-8">CAFE</h2>
+            <p class="text-xl text-white max-w-2xl mx-auto mb-8">Premium ta'mlar va noyob atmosfera - Milano Cafeda har bir lahzani his eting!</p>
+            <a href="#menu" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-8 rounded-full text-lg transition duration-300 inline-block">MENYUNI KO'RISH</a>
+        </div>
+        
+        <!-- Floating food images -->
+        <div class="absolute top-1/4 left-10 z-10 floating hidden md:block">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1398&q=80" alt="Burger" class="w-32 h-32 rounded-full object-cover border-4 border-yellow-400 shadow-lg">
+        </div>
+        <div class="absolute top-1/3 right-10 z-10 floating hidden md:block" style="animation-delay: 1s;">
+            <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Pizza" class="w-32 h-32 rounded-full object-cover border-4 border-yellow-400 shadow-lg">
+        </div>
+        <div class="absolute bottom-1/4 left-20 z-10 floating hidden md:block" style="animation-delay: 2s;">
+            <img src="https://images.unsplash.com/photo-1550547660-9455f3d506a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Hotdog" class="w-32 h-32 rounded-full object-cover border-4 border-yellow-400 shadow-lg">
+        </div>
+        
+        <!-- Background video -->
+        <video autoplay muted loop class="absolute inset-0 w-full h-full object-cover -z-1">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-restaurant-interior-with-tables-and-chairs-1583-large.mp4" type="video/mp4">
+        </video>
+    </section>
+
+    <!-- Popular Dishes -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">MASHHUR TAYORLAR</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="food-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1398&q=80" alt="Burger" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">MILANO BURGER</h3>
+                        <p class="text-gray-600 mb-4">Juft go'shtli, pishloqli, yangi sabzavotlar bilan</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">45,000 UZS</span>
+                            <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-full transition duration-300" data-id="1" data-name="MILANO BURGER" data-price="45000">
+                                <i class="fas fa-cart-plus"></i> Qo'shish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="food-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
+                    <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Pizza" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">MARGARITA PITSA</h3>
+                        <p class="text-gray-600 mb-4">Italiya pishloqi, pomidor sousi, yangi rayhon</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">65,000 UZS</span>
+                            <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-full transition duration-300" data-id="2" data-name="MARGARITA PITSA" data-price="65000">
+                                <i class="fas fa-cart-plus"></i> Qo'shish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="food-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
+                    <img src="https://images.unsplash.com/photo-1550547660-9455f3d506a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Hotdog" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">PREMIUM HODDOG</h3>
+                        <p class="text-gray-600 mb-4">Kalbasa, xantal, ketchup, qovurilgan piyoz</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">30,000 UZS</span>
+                            <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-full transition duration-300" data-id="3" data-name="PREMIUM HODDOG" data-price="30000">
+                                <i class="fas fa-cart-plus"></i> Qo'shish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="food-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" alt="Steak" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">ANGUS STEAK</h3>
+                        <p class="text-gray-600 mb-4">250gr angus mol go'shti, qovurilgan kartoshka</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">85,000 UZS</span>
+                            <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-full transition duration-300" data-id="4" data-name="ANGUS STEAK" data-price="85000">
+                                <i class="fas fa-cart-plus"></i> Qo'shish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="menu-section py-16 text-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">MENYU</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Burgers -->
+                <div class="bg-black bg-opacity-70 rounded-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">BURGERLAR</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">MILANO BURGER</h4>
+                                <p class="text-sm text-gray-300">Juft go'shtli, pishloqli, yangi sabzavotlar bilan</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">45,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="1" data-name="MILANO BURGER" data-price="45000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">CHEESEBURGER</h4>
+                                <p class="text-sm text-gray-300">Go'shtli, pishloqli, xantal va ketchup bilan</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">40,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="5" data-name="CHEESEBURGER" data-price="40000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">CHICKEN BURGER</h4>
+                                <p class="text-sm text-gray-300">Tovuq go'shti, salat bargi, pomidor</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">38,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="6" data-name="CHICKEN BURGER" data-price="38000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pizzas -->
+                <div class="bg-black bg-opacity-70 rounded-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">PITSA</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">MARGARITA</h4>
+                                <p class="text-sm text-gray-300">Italiya pishloqi, pomidor sousi, yangi rayhon</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">65,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="2" data-name="MARGARITA PITSA" data-price="65000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">PEPPERONI</h4>
+                                <p class="text-sm text-gray-300">Pepperoni kolbasa, pishloq, pomidor sousi</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">70,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="7" data-name="PEPPERONI PITSA" data-price="70000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">4 PISHLOQ</h4>
+                                <p class="text-sm text-gray-300">4 xil pishloq, pomidor sousi, rayhon</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">75,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="8" data-name="4 PISHLOQ PITSA" data-price="75000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hotdogs -->
+                <div class="bg-black bg-opacity-70 rounded-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">HODDOGLAR</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">PREMIUM HODDOG</h4>
+                                <p class="text-sm text-gray-300">Kalbasa, xantal, ketchup, qovurilgan piyoz</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">30,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="3" data-name="PREMIUM HODDOG" data-price="30000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">CHEESE HODDOG</h4>
+                                <p class="text-sm text-gray-300">Kalbasa, pishloq, ketchup, xantal</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">35,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="9" data-name="CHEESE HODDOG" data-price="35000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">DOUBLE HODDOG</h4>
+                                <p class="text-sm text-gray-300">2 ta kalbasa, pishloq, pomidor, xantal</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">40,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="10" data-name="DOUBLE HODDOG" data-price="40000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Steaks -->
+                <div class="bg-black bg-opacity-70 rounded-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">STEAKLAR</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">ANGUS STEAK</h4>
+                                <p class="text-sm text-gray-300">250gr angus mol go'shti, qovurilgan kartoshka</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">85,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="4" data-name="ANGUS STEAK" data-price="85000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">CHICKEN STEAK</h4>
+                                <p class="text-sm text-gray-300">Tovuq filesi, qovurilgan kartoshka, sabzavotlar</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">60,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="11" data-name="CHICKEN STEAK" data-price="60000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                            <div>
+                                <h4 class="font-bold">SALMON STEAK</h4>
+                                <p class="text-sm text-gray-300">300gr losos balig'i, limon, sabzavotlar</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-4">95,000 UZS</span>
+                                <button class="add-to-cart bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-full text-sm transition duration-300" data-id="12" data-name="SALMON STEAK" data-price="95000">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Section -->
+    <section id="cart" class="py-16 bg-gray-100 hidden">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">SAVAT</h2>
+            
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <div id="cart-items" class="space-y-4">
+                        <!-- Cart items will be added here dynamically -->
+                        <div class="text-center py-8">
+                            <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500">Savat bo'sh</p>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 mt-6 pt-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">JAMI:</span>
+                            <span id="cart-total" class="text-xl font-bold">0 UZS</span>
+                        </div>
+                        
+                        <button id="checkout-btn" class="w-full mt-6 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-full transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-hamburger mr-2"></i> BUYURTMA BERISH (<span id="checkout-total">0</span> UZS)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">BUYURTMA BERISH</h3>
+                
+                <div id="checkout-form">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Ismingiz</label>
+                        <input type="text" id="customer-name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Telefon raqam</label>
+                        <input type="tel" id="customer-phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Manzil</label>
+                        <textarea id="customer-address" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Qo'shimcha izoh</label>
+                        <textarea id="customer-note" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mt-6">
+                        <button id="cancel-checkout" class="px-4 py-2 text-gray-600 hover:text-gray-800">BEKOR QILISH</button>
+                        <button id="confirm-order" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-6 rounded-full transition duration-300">
+                            TASDIQLASH
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="order-success" class="hidden text-center py-8">
+                    <i class="fas fa-check-circle text-5xl text-green-500 mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2">BUYURTMA QABUL QILINDI!</h4>
+                    <p class="text-gray-600 mb-4">Tez orada operatorimiz siz bilan bog'lanadi</p>
+                    <button id="close-modal" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-6 rounded-full transition duration-300">
+                        YOPISH
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">BIZ HAQIMIZDA</h2>
+            
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Milano Cafe" class="w-full rounded-lg shadow-lg">
+                </div>
+                
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-bold mb-4">MILANO CAFE</h3>
+                    <p class="text-gray-600 mb-4">2015-yildan beri xizmat ko'rsatib kelayotgan Milano Cafe - bu premium ta'mlar va noyob atmosfera uyg'unligi. Bizning asosiy maqsadimiz - mijozlarimizga eng yaxshi sifatli mahsulotlar va ajoyib xizmatni taqdim etish.</p>
+                    <p class="text-gray-600 mb-6">Bizning oshpazlarimiz xalqaro tajribaga ega bo'lib, har bir taomga alohida e'tibor va mehr bilan yondashadi.</p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fas fa-map-marker-alt text-yellow-400 mr-3"></i>
+                            <span>Toshkent shahri, Mirzo Ulug'bek tumani, Amir Temur ko'chasi 45</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-yellow-400 mr-3"></i>
+                            <span>+998 90 123 45 67</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-yellow-400 mr-3"></i>
+                            <span>info@milanocafe.uz</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-clock text-yellow-400 mr-3"></i>
+                            <span>Dushanba-Yakshanba: 09:00 - 23:00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex space-x-4">
+                        <a href="#" class="text-gray-700 hover:text-yellow-400 transition duration-300">
+                            <i class="fab fa-instagram text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-700 hover:text-yellow-400 transition duration-300">
+                            <i class="fab fa-telegram text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-700 hover:text-yellow-400 transition duration-300">
+                            <i class="fab fa-facebook text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">ALOQA</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold mb-4">BIZGA XABAR YUBORISH</h3>
+                    
+                    <form id="contact-form">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Ismingiz</label>
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Email manzilingiz</label>
+                            <input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Xabar</label>
+                            <textarea class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="4" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-full transition duration-300">
+                            YUBORISH
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold mb-4">BIZ BILAN BOG'LANING</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-bold text-gray-700">MANZIL:</h4>
+                            <p class="text-gray-600">Toshkent shahri, Mirzo Ulug'bek tumani, Amir Temur ko'chasi 45</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-gray-700">TELEFON:</h4>
+                            <p class="text-gray-600">+998 90 123 45 67</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-gray-700">EMAIL:</h4>
+                            <p class="text-gray-600">info@milanocafe.uz</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-gray-700">ISH VAQTI:</h4>
+                            <p class="text-gray-600">Dushanba-Yakshanba: 09:00 - 23:00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2996.254654655566!2d69.2793693157259!3d41.32538440720292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38aef4d376394b31%3A0xf8d0e6a6a8a4a4a4!2sAmir%20Temur%20Square!5e0!3m2!1sen!2s!4v1620000000000!5m2!1sen!2s" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">ADMIN KIRISH</h3>
+                
+                <form id="admin-form">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Login</label>
+                        <input type="text" id="admin-login" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Parol</label>
+                        <input type="password" id="admin-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mt-6">
+                        <button type="button" id="cancel-admin" class="px-4 py-2 text-gray-600 hover:text-gray-800">BEKOR QILISH</button>
+                        <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-6 rounded-full transition duration-300">
+                            KIRISH
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <section id="admin-panel" class="py-16 bg-gray-100 hidden">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">ADMIN PANEL</h2>
+            
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-6">BUYURTMALAR RO'YXATI</h3>
+                    
+                    <div id="orders-list" class="space-y-4">
+                        <!-- Orders will be added here dynamically -->
+                        <div class="text-center py-8">
+                            <i class="fas fa-clipboard-list text-4xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500">Hozircha buyurtmalar yo'q</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-yellow-400">MILANO CAFE</h3>
+                    <p class="text-gray-400">Premium ta'mlar va noyob atmosfera - Milano Cafeda har bir lahzani his eting!</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">MANZIL</h3>
+                    <p class="text-gray-400">Toshkent shahri, Mirzo Ulug'bek tumani, Amir Temur ko'chasi 45</p>
+                    <p class="text-gray-400 mt-2">+998 90 123 45 67</p>
+                    <p class="text-gray-400">info@milanocafe.uz</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">IJTIMOIY TARMOQLAR</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300">
+                            <i class="fab fa-instagram text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300">
+                            <i class="fab fa-telegram text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-yellow-400 transition duration-300">
+                            <i class="fab fa-facebook text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 MILANO CAFE. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Navigation links
+        const navLinks = document.querySelectorAll('.nav-link, .nav-link-mobile');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Hide all sections
+                document.querySelectorAll('section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+                
+                // Show clicked section
+                const target = this.getAttribute('href').substring(1);
+                if (target === 'admin') {
+                    document.getElementById('admin-modal').classList.remove('hidden');
+                } else {
+                    document.getElementById(target).classList.remove('hidden');
+                }
+                
+                // Close mobile menu if open
+                document.getElementById('mobile-menu').classList.add('hidden');
+                
+                // Update active link
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                e.preventDefault();
+            });
+        });
+
+        // Cart functionality
+        let cart = [];
+        
+        // Add to cart buttons
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const price = parseInt(this.getAttribute('data-price'));
+                
+                // Check if item already in cart
+                const existingItem = cart.find(item => item.id === id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id,
+                        name,
+                        price,
+                        quantity: 1
+                    });
+                }
+                
+                updateCart();
+                
+                // Show notification
+                const notification = document.getElementById('notification');
+                notification.classList.remove('hidden');
+                setTimeout(() => {
+                    notification.classList.add('hidden');
+                }, 5000);
+            });
+        });
+        
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+            document.getElementById('mobile-cart-count').textContent = totalItems;
+            
+            // Update cart items display
+            const cartItems = document.getElementById('cart-items');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500">Savat bo'sh</p>
+                    </div>
+                `;
+            } else {
+                let html = '';
+                
+                cart.forEach(item => {
+                    html += `
+                        <div class="flex justify-between items-center border-b border-gray-200 pb-4">
+                            <div>
+                                <h4 class="font-bold">${item.name}</h4>
+                                <p class="text-gray-600">${item.price.toLocaleString()} UZS</p>
+                            </div>
+                            <div class="flex items-center">
+                                <button class="decrease-quantity px-2 py-1 bg-gray-200 rounded-l-lg" data-id="${item.id}">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="px-3 py-1 bg-gray-100">${item.quantity}</span>
+                                <button class="increase-quantity px-2 py-1 bg-gray-200 rounded-r-lg" data-id="${item.id}">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button class="remove-item ml-4 text-red-500" data-id="${item.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                cartItems.innerHTML = html;
+                
+                // Add event listeners to quantity buttons
+                document.querySelectorAll('.decrease-quantity').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        
+                        if (item.quantity > 1) {
+                            item.quantity -= 1;
+                        } else {
+                            cart = cart.filter(item => item.id !== id);
+                        }
+                        
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.increase-quantity').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        item.quantity += 1;
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        cart = cart.filter(item => item.id !== id);
+                        updateCart();
+                    });
+                });
+            }
+            
+            // Update cart total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('cart-total').textContent = `${total.toLocaleString()} UZS`;
+            document.getElementById('checkout-total').textContent = total.toLocaleString();
+        }
+        
+        // Checkout button
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            if (cart.length > 0) {
+                document.getElementById('checkout-modal').classList.remove('hidden');
+            }
+        });
+        
+        // Cancel checkout
+        document.getElementById('cancel-checkout').addEventListener('click', function() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        });
+        
+        // Close modal
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        });
+        
+        // Confirm order
+        document.getElementById('confirm-order').addEventListener('click', function() {
+            const name = document.getElementById('customer-name').value;
+            const phone = document.getElementById('customer-phone').value;
+            const address = document.getElementById('customer-address').value;
+            const note = document.getElementById('customer-note').value;
+            
+            if (name && phone && address) {
+                // In a real app, you would send this data to your server
+                const order = {
+                    customer: { name, phone, address, note },
+                    items: cart,
+                    date: new Date().toISOString(),
+                    status: 'Yangi'
+                };
+                
+                // Save to localStorage (simulating database)
+                let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                orders.push(order);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                
+                // Show success message
+                document.getElementById('checkout-form').classList.add('hidden');
+                document.getElementById('order-success').classList.remove('hidden');
+                
+                // Clear cart
+                cart = [];
+                updateCart();
+            }
+        });
+        
+        // Admin login
+        document.getElementById('admin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const login = document.getElementById('admin-login').value;
+            const password = document.getElementById('admin-password').value;
+            
+            // Simple admin credentials check
+            if (login === 'admin' && password === 'admin123') {
+                document.getElementById('admin-modal').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                
+                // Load orders
+                const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                const ordersList = document.getElementById('orders-list');
+                
+                if (orders.length === 0) {
+                    ordersList.innerHTML = `
+                        <div class="text-center py-8">
+                            <i class="fas fa-clipboard-list text-4xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500">Hozircha buyurtmalar yo'q</p>
+                        </div>
+                    `;
+                } else {
+                    let html = '';
+                    
+                    orders.forEach((order, index) => {
+                        const total = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                        
+                        html += `
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="font-bold">Buyurtma #${index + 1}</h4>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">${order.status}</span>
+                                </div>
+                                <p class="text-gray-600 mb-2"><strong>Mijoz:</strong> ${order.customer.name}</p>
+                                <p class="text-gray-600 mb-2"><strong>Telefon:</strong> ${order.customer.phone}</p>
+                                <p class="text-gray-600 mb-2"><strong>Manzil:</strong> ${order.customer.address}</p>
+                                ${order.customer.note ? `<p class="text-gray-600 mb-2"><strong>Izoh:</strong> ${order.customer.note}</p>` : ''}
+                                
+                                <div class="mt-3">
+                                    <h5 class="font-bold mb-1">Buyurtmalar:</h5>
+                                    <ul class="list-disc list-inside text-gray-600">
+                                        ${order.items.map(item => `<li>${item.name} - ${item.quantity} x ${item.price.toLocaleString()} UZS</li>`).join('')}
+                                    </ul>
+                                </div>
+                                
+                                <div class="mt-3 flex justify-between items-center">
+                                    <span class="font-bold">Jami: ${total.toLocaleString()} UZS</span>
+                                    <button class="complete-order px-3 py-1 bg-green-500 text-white rounded-full text-sm" data-index="${index}">
+                                        <i class="fas fa-check mr-1"></i> Yakunlash
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    ordersList.innerHTML = html;
+                    
+                    // Add event listeners to complete buttons
+                    document.querySelectorAll('.complete-order').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const index = parseInt(this.getAttribute('data-index'));
+                            let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                            
+                            // Update order status
+                            orders[index].status = 'Yakunlangan';
+                            localStorage.setItem('orders', JSON.stringify(orders));
+                            
+                            // Reload orders
+                            document.getElementById('admin-form').dispatchEvent(new Event('submit'));
+                        });
+                    });
+                }
+            } else {
+                alert('Noto‘g‘ri login yoki parol!');
+            }
+        });
+        
+        // Cancel admin login
+        document.getElementById('cancel-admin').addEventListener('click', function() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        });
+        
+        // Show home section by default
+        document.getElementById('home').classList.remove('hidden');
+    </script>
+</body>
+</html>
